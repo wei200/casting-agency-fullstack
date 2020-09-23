@@ -20,8 +20,39 @@ def setup_db(app, database_path=database_path):
     db.app = app
     db.init_app(app)
     db.create_all()
+def db_drop_and_create_all():
+    db.drop_all()
+    db.create_all()
+    db_init_records()
 
+# initilize some records in the table
+def db_init_records():
+    new_actor1 = (Actor(
+        name = 'Andrew',
+        gender = 'Male',
+        age = 23
+        ))
+    new_actor2 = (Actor(
+        name = 'Betty',
+        gender = 'Female',
+        age = 33
+        ))
+    new_movie1 = (Movie(
+        title = 'Raiders of the lost Arc',
+        release_date = date.today()
+        ))
+    new_movie2 = (Movie(
+        title = 'Pursuit of happiness',
+        release_date = date.today()
+        ))
 
+    new_actor1.insert()
+    new_actor2.insert()
+
+    new_movie1.insert()
+    new_movie2.insert()
+
+    db.session.commit()
 '''
 Movie
 '''
@@ -31,11 +62,11 @@ class Movie(db.Model):
     
     id = Column(Integer, primary_key=True)
     title = Column(String)
-    releaseDate = Column(db.DateTime)
+    release_date = Column(db.DateTime)
 
-    def __init__(self, title, releaseDate):
+    def __init__(self, title, release_date):
         self.title = title
-        self.releaseDate = releaseDate
+        self.release_date = release_date
     
     def insert(self):
         db.session.add(self)
@@ -51,11 +82,11 @@ class Movie(db.Model):
         return {
             'id': self.id,
             'title': self.title,
-            'releaseDate': self.releaseDate
+            'release_date': self.release_date
         }
 
 
-'''
+''''
 Actor
 '''
 
